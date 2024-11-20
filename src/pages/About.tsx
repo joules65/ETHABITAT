@@ -59,7 +59,7 @@ const About = () => {
         <div className="grid md:grid-cols-1 gap-8">
           <TeamMember
             image="https://i.imghippo.com/files/iPfW2606lds.JPG" 
-            name="John Doe"
+            name="David Chukwuebuka Achibiri"
             role="CEO & Founder"
           />
           
