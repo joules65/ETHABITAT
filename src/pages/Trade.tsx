@@ -18,7 +18,7 @@ const Trade = () => {
       <div className="max-w-2xl mx-auto text-center space-y-6">
         <AlertCircle className="h-16 w-16 text-yellow-500 mx-auto" />
         <h2 className="text-2xl font-bold">Wallet Not Connected</h2>
-        <p className="text-white">Please connect your wallet to access the trading features.</p>
+        <p className="text-white-400">Please connect your wallet to access the trading features.</p>
       </div>
     );
   }
@@ -28,7 +28,7 @@ const Trade = () => {
       {/* Trading Interface */}
       <div className="grid md:grid-cols-2 gap-8">
         {/* Trading Form */}
-        <div className="bg-black p-8 rounded-lg">
+        <div className="bg-gray-800 p-8 rounded-lg">
           <div className="flex items-center space-x-2 mb-6">
             <ArrowRightLeft className="h-6 w-6 text-emerald-500" />
             <h2 className="text-2xl font-bold">Trade</h2>
