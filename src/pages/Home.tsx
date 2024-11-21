@@ -27,7 +27,7 @@ const Home = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               to="/properties"
-              className="bg-yellow-400 hover:bg-amber-600 text-white px-8 py-3 rounded-lg font-semibold transition-colors"
+              className="bg-yellow-400 hover:bg-black text-white px-8 py-3 rounded-lg font-semibold transition-colors"
             >
               Explore Properties
             </Link>
