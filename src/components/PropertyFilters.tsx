@@ -1,15 +1,14 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React from 'react';
-import { Search, SlidersHorizontal } from 'lucide-react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Search } from 'lucide-react';
 
-interface PropertyFiltersProps {
+export interface PropertyFiltersProps {
   onSearch: (value: string) => void;
   onFilterChange: (filters: any) => void;
 }
 
 const PropertyFilters = ({ onSearch, onFilterChange }: PropertyFiltersProps) => {
-  const locations = ['All Locations', 'Lagos', 'Nairobi', 'Cape Town', 'Accra', 'Johannesburg', 'Addis Ababa'];
-  const priceRanges = ['Any Price', '0-100 ETH', '100-300 ETH', '300-500 ETH', '500+ ETH'];
+  const locations = ['All Locations', 'Lagos', 'Nairobi', 'Cape Town', 'Accra', 'Johannesburg', 'Addis Ababa','Cairo'];
+  const priceRanges = ['Any Price', '0-100', '100-300', '300-500', '500+'];
   const propertyTypes = ['All Types', 'House', 'Apartment', 'Villa', 'Land', 'Commercial'];
 
   return (
@@ -28,13 +27,15 @@ const PropertyFilters = ({ onSearch, onFilterChange }: PropertyFiltersProps) => 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {/* Location Filter */}
         <div>
-          <label className="block text-sm font-medium text-white mb-2">Location</label>
+          <label className="block text-sm font-medium text-black mb-2">Location</label>
           <select
             className="input-field w-full"
             onChange={(e) => onFilterChange({ location: e.target.value })}
           >
             {locations.map((location) => (
-              <option key={location} value={location}>{location}</option>
+              <option key={location} value={location}>
+                {location}
+              </option>
             ))}
           </select>
         </div>
@@ -47,7 +48,9 @@ const PropertyFilters = ({ onSearch, onFilterChange }: PropertyFiltersProps) => 
             onChange={(e) => onFilterChange({ priceRange: e.target.value })}
           >
             {priceRanges.map((range) => (
-              <option key={range} value={range}>{range}</option>
+              <option key={range} value={range}>
+                {range}
+              </option>
             ))}
           </select>
         </div>
@@ -60,7 +63,9 @@ const PropertyFilters = ({ onSearch, onFilterChange }: PropertyFiltersProps) => 
             onChange={(e) => onFilterChange({ propertyType: e.target.value })}
           >
             {propertyTypes.map((type) => (
-              <option key={type} value={type}>{type}</option>
+              <option key={type} value={type}>
+                {type}
+              </option>
             ))}
           </select>
         </div>

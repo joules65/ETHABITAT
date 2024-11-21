@@ -35,7 +35,7 @@ const PropertyGrid = ({ properties }: PropertyGridProps) => {
           placeholder="Search properties..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="p-2 border border-white rounded-lg w-full"
+          className="p-2 border border-white rounded-lg w-full text-black"
         />
       </div>
 
@@ -80,7 +80,7 @@ const PropertyGrid = ({ properties }: PropertyGridProps) => {
             </div>
           ))
         ) : (
-          <p className="col-span-4 text-center text-gray-600">No properties found.</p>
+          <p className="col-span-4 text-center text-white">No properties found.</p>
         )}
       </div>
     </div>

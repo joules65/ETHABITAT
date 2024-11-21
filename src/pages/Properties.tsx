@@ -81,6 +81,7 @@ const Properties = () => {
     priceRange: 'Any Price',
     propertyType: 'All Types'
   });
+  
 
   const handleSearch = (value: string) => {
     setSearchTerm(value);
