@@ -61,6 +61,17 @@ const SAMPLE_PROPERTIES: Property[] = [
     bathrooms: 1,
     area: '150 m²'
   },
+  {
+    id: '6',
+    title: 'Exclusive Penthouse',
+    location: 'Kigali, Rwanda',
+    price: '750 ETH',
+    type: 'Villa',
+    image: 'https://res.cloudinary.com/dhkscpkf5/image/upload/v1732185839/rwanda_czuqmw.jpg',
+    bedrooms: 5,
+    bathrooms: 3,
+    area: '1300 m²'
+  },
 ];
 
 const Properties = () => {
