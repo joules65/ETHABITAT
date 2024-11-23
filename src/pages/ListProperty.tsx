@@ -5,10 +5,66 @@ import { useWallet } from '../hooks/useWallet';
 const ListProperty = () => {
   const { isConnected } = useWallet();
   const [images, setImages] = useState<File[]>([]);
+  const [formData, setFormData] = useState({
+    title: '',
+    type: '',
+    price: '',
+    location: '',
+    bedrooms: 0,
+    bathrooms: 0,
+    area: 0,
+    description: ''
+  });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle property listing submission
+    
+    // Create a FormData object to send the data including images
+    const data = new FormData();
+    
+    // Append form data
+    data.append('title', formData.title);
+    data.append('type', formData.type);
+    data.append('price', formData.price);
+    data.append('location', formData.location);
+    data.append('bedrooms', String(formData.bedrooms));
+    data.append('bathrooms', String(formData.bathrooms));
+    data.append('area', String(formData.area));
+    data.append('description', formData.description);
+
+    // Append images
+    images.forEach((image) => {
+      data.append('images', image);
+    });
+
+    try {
+      // Example: Send the form data to the backend API
+      const response = await fetch('/api/list-property', {
+        method: 'POST',
+        body: data,
+      });
+
+      if (response.ok) {
+        alert('Property listed successfully');
+        // Reset form
+        setFormData({
+          title: '',
+          type: '',
+          price: '',
+          location: '',
+          bedrooms: 0,
+          bathrooms: 0,
+          area: 0,
+          description: ''
+        });
+        setImages([]);
+      } else {
+        alert('Failed to list property');
+      }
+    } catch (error) {
+      console.error('Error uploading property:', error);
+      alert('An error occurred. Please try again.');
+    }
   };
 
   if (!isConnected) {
@@ -39,14 +95,25 @@ const ListProperty = () => {
               <label className="block text-sm font-medium text-white mb-2">
                 Property Title
               </label>
-              <input type="text" className="input-field w-full" required />
+              <input
+                type="text"
+                className="input-field w-full"
+                value={formData.title}
+                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                required
+              />
             </div>
 
             <div>
               <label className="block text-sm font-medium text-white mb-2">
                 Property Type
               </label>
-              <select className="input-field w-full" required>
+              <select
+                className="input-field w-full"
+                value={formData.type}
+                onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+                required
+              >
                 <option value="">Select type</option>
                 <option value="house">House</option>
                 <option value="apartment">Apartment</option>
@@ -60,14 +127,27 @@ const ListProperty = () => {
               <label className="block text-sm font-medium text-white mb-2">
                 Price (ETH)
               </label>
-              <input type="number" step="0.01" className="input-field w-full" required />
+              <input
+                type="number"
+                step="0.01"
+                className="input-field w-full"
+                value={formData.price}
+                onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                required
+              />
             </div>
 
             <div>
               <label className="block text-sm font-medium text-white mb-2">
                 Location
               </label>
-              <input type="text" className="input-field w-full" required />
+              <input
+                type="text"
+                className="input-field w-full"
+                value={formData.location}
+                onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                required
+              />
             </div>
           </div>
         </div>
@@ -81,21 +161,39 @@ const ListProperty = () => {
               <label className="block text-sm font-medium text-white mb-2">
                 Bedrooms
               </label>
-              <input type="number" className="input-field w-full" min="0" />
+              <input
+                type="number"
+                className="input-field w-full"
+                value={formData.bedrooms}
+                onChange={(e) => setFormData({ ...formData, bedrooms: +e.target.value })}
+                min="0"
+              />
             </div>
 
             <div>
               <label className="block text-sm font-medium text-white mb-2">
                 Bathrooms
               </label>
-              <input type="number" className="input-field w-full" min="0" />
+              <input
+                type="number"
+                className="input-field w-full"
+                value={formData.bathrooms}
+                onChange={(e) => setFormData({ ...formData, bathrooms: +e.target.value })}
+                min="0"
+              />
             </div>
 
             <div>
               <label className="block text-sm font-medium text-white mb-2">
                 Area (m²)
               </label>
-              <input type="number" className="input-field w-full" min="0" />
+              <input
+                type="number"
+                className="input-field w-full"
+                value={formData.area}
+                onChange={(e) => setFormData({ ...formData, area: +e.target.value })}
+                min="0"
+              />
             </div>
           </div>
 
@@ -106,6 +204,8 @@ const ListProperty = () => {
             <textarea
               rows={4}
               className="input-field w-full"
+              value={formData.description}
+              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               required
             ></textarea>
           </div>
