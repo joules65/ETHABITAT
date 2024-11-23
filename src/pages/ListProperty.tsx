@@ -16,29 +16,41 @@ const ListProperty = () => {
     description: ''
   });
 
+  // Handle form data input change
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
+  // Handle file input change (image upload)
+  // Handle file input change (image upload)
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      // Get the files and update the state
+      setImages((prevImages) => [...prevImages, ...Array.from(e.target.files ?? [])]);
+    }
+  };
+
+  // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Create a FormData object to send the data including images
+
+    // Create FormData to send the data along with images
     const data = new FormData();
     
-    // Append form data
-    data.append('title', formData.title);
-    data.append('type', formData.type);
-    data.append('price', formData.price);
-    data.append('location', formData.location);
-    data.append('bedrooms', String(formData.bedrooms));
-    data.append('bathrooms', String(formData.bathrooms));
-    data.append('area', String(formData.area));
-    data.append('description', formData.description);
+    // Append text data
+    Object.keys(formData).forEach((key) => {
+      // Fix for the error on line 43
+      data.append(key, String(formData[key as keyof typeof formData]));
+    });
 
-    // Append images
+    // Append images to FormData
     images.forEach((image) => {
       data.append('images', image);
     });
 
     try {
-      // Example: Send the form data to the backend API
+      // Send the form data to the backend (or blockchain service)
       const response = await fetch('/api/list-property', {
         method: 'POST',
         body: data,
@@ -67,6 +79,7 @@ const ListProperty = () => {
     }
   };
 
+  // Show error message if wallet is not connected
   if (!isConnected) {
     return (
       <div className="max-w-2xl mx-auto text-center space-y-6">
@@ -89,7 +102,6 @@ const ListProperty = () => {
         {/* Basic Information */}
         <div className="bg-black p-8 rounded-lg space-y-6">
           <h2 className="text-2xl font-semibold mb-6">Basic Information</h2>
-          
           <div className="grid md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-medium text-white mb-2">
@@ -98,8 +110,9 @@ const ListProperty = () => {
               <input
                 type="text"
                 className="input-field w-full"
+                name="title"
                 value={formData.title}
-                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                onChange={handleInputChange}
                 required
               />
             </div>
@@ -110,8 +123,9 @@ const ListProperty = () => {
               </label>
               <select
                 className="input-field w-full"
+                name="type"
                 value={formData.type}
-                onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+                onChange={handleInputChange}
                 required
               >
                 <option value="">Select type</option>
@@ -131,8 +145,9 @@ const ListProperty = () => {
                 type="number"
                 step="0.01"
                 className="input-field w-full"
+                name="price"
                 value={formData.price}
-                onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                onChange={handleInputChange}
                 required
               />
             </div>
@@ -144,8 +159,9 @@ const ListProperty = () => {
               <input
                 type="text"
                 className="input-field w-full"
+                name="location"
                 value={formData.location}
-                onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                onChange={handleInputChange}
                 required
               />
             </div>
@@ -155,7 +171,6 @@ const ListProperty = () => {
         {/* Property Details */}
         <div className="bg-black p-8 rounded-lg space-y-6">
           <h2 className="text-2xl font-semibold mb-6">Property Details</h2>
-          
           <div className="grid md:grid-cols-3 gap-6">
             <div>
               <label className="block text-sm font-medium text-white mb-2">
@@ -164,8 +179,9 @@ const ListProperty = () => {
               <input
                 type="number"
                 className="input-field w-full"
+                name="bedrooms"
                 value={formData.bedrooms}
-                onChange={(e) => setFormData({ ...formData, bedrooms: +e.target.value })}
+                onChange={handleInputChange}
                 min="0"
               />
             </div>
@@ -177,8 +193,9 @@ const ListProperty = () => {
               <input
                 type="number"
                 className="input-field w-full"
+                name="bathrooms"
                 value={formData.bathrooms}
-                onChange={(e) => setFormData({ ...formData, bathrooms: +e.target.value })}
+                onChange={handleInputChange}
                 min="0"
               />
             </div>
@@ -190,8 +207,9 @@ const ListProperty = () => {
               <input
                 type="number"
                 className="input-field w-full"
+                name="area"
                 value={formData.area}
-                onChange={(e) => setFormData({ ...formData, area: +e.target.value })}
+                onChange={handleInputChange}
                 min="0"
               />
             </div>
@@ -204,8 +222,9 @@ const ListProperty = () => {
             <textarea
               rows={4}
               className="input-field w-full"
+              name="description"
               value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              onChange={handleInputChange}
               required
             ></textarea>
           </div>
@@ -214,7 +233,6 @@ const ListProperty = () => {
         {/* Images Upload */}
         <div className="bg-yellow-400 p-8 rounded-lg space-y-6">
           <h2 className="text-2xl font-semibold mb-6">Property Images</h2>
-          
           <div className="border-2 border-dashed border-white rounded-lg p-8 text-center">
             <Upload className="h-12 w-12 text-black mx-auto mb-4" />
             <p className="text-white mb-2">Drag and drop your images here, or click to select files</p>
@@ -224,11 +242,7 @@ const ListProperty = () => {
               multiple
               accept="image/*"
               className="hidden"
-              onChange={(e) => {
-                if (e.target.files) {
-                  setImages(Array.from(e.target.files));
-                }
-              }}
+              onChange={handleImageChange}
             />
           </div>
 
