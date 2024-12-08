@@ -23,12 +23,28 @@ const ListProperty = () => {
   };
 
   // Handle file input change (image upload)
-  // Handle file input change (image upload)
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      // Get the files and update the state
-      setImages((prevImages) => [...prevImages, ...Array.from(e.target.files ?? [])]);
+      setImages((prevImages) => [...prevImages, ...Array.from(e.target.files)]);
     }
+  };
+
+  // Handle drop event for dragging and dropping images
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (e.dataTransfer.files) {
+      setImages((prevImages) => [
+        ...prevImages,
+        ...Array.from(e.dataTransfer.files)
+      ]);
+    }
+  };
+
+  // Prevent the default behavior when dragging files over the drop zone
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
   };
 
   // Handle form submission
@@ -37,10 +53,10 @@ const ListProperty = () => {
 
     // Create FormData to send the data along with images
     const data = new FormData();
-    
+
     // Append text data
     Object.keys(formData).forEach((key) => {
-      // Fix for the error on line 43
+      // Fix for the error on line 59
       data.append(key, String(formData[key as keyof typeof formData]));
     });
 
@@ -233,7 +249,11 @@ const ListProperty = () => {
         {/* Images Upload */}
         <div className="bg-yellow-400 p-8 rounded-lg space-y-6">
           <h2 className="text-2xl font-semibold mb-6">Property Images</h2>
-          <div className="border-2 border-dashed border-white rounded-lg p-8 text-center">
+          <div
+            className="border-2 border-dashed border-white rounded-lg p-8 text-center"
+            onDrop={handleDrop}
+            onDragOver={handleDragOver}
+          >
             <Upload className="h-12 w-12 text-black mx-auto mb-4" />
             <p className="text-white mb-2">Drag and drop your images here, or click to select files</p>
             <p className="text-sm text-white">Maximum 10 images, PNG or JPG (max. 5MB each)</p>
